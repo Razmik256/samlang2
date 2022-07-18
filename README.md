@@ -19,8 +19,8 @@ func alo(x,y) {
 - [x] booleans
 - [ ] arrays
 - [ ] strings
-- [ ] if else
-- [ ] loops
+- [x] if else
+- [x] loops
 - [ ] functions
 - [ ] local variables
 - [ ] memory managment
