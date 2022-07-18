@@ -3,6 +3,8 @@
 ```ruby
 x = true;
 x = 2;
+y = "alo";
+z = [1,2,3];
 
 while x < 10 {
   x = x + 1;
