@@ -30,6 +30,14 @@ func Parse(toks []tok) []coin {
 			}
 			ends = append(ends, "IFEND")
 			coins = append(coins, coin{"IF", val, ""})
+		} else if toks[i].value == "while" {
+			val := ""
+			for toks[i+1].typ != "LBRACKET" {
+				i += 1
+				val += toks[i].value
+			}
+			ends = append(ends, "WHILEEND")
+			coins = append(coins, coin{"WHILE", val, ""})
 		} else if toks[i].value == "else" {
 			coins = append(coins, coin{"ELSE", "", ""})
 			ends = append(ends, "ELSEEND")

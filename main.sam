@@ -1,1 +1,2 @@
-x = ~(true & true) | false;
+arr = [6,3,4,5,1,2];
+alo = arr[1,2];

@@ -10,5 +10,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(Interprate(Parse(Lex(string(filedata)))))
+	fmt.Println(Interprate(Parse(Lex(string(filedata))), map[string]variable{}))
 }
