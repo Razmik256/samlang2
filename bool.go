@@ -45,8 +45,18 @@ func BoolEval(str string, tested bool) string {
 	// ~(true & true | false) | false
 	// true & true | false
 	lex := Lex(str)
+	fmt.Println(lex)
 	for i := 0; i < len(lex); i++ {
-		if lex[i].value == "+" || lex[i].value == "-" || lex[i].value == "/" || lex[i].value == "*" {
+		if lex[i].value == "[" {
+			start := i
+			a := "["
+			for lex[i].typ != "GREATER" {
+				i++
+				a += lex[i].value
+			}
+			v := ArrEval(a)
+			lex = replaceArrPart(lex, start, i, tok{"KEYWORD", v[1 : len(v)-1]})
+		} else if (lex[i].value == "+" && lex[i+1].value != "+") || lex[i].value == "-" || lex[i].value == "/" || lex[i].value == "*" {
 			lex = replaceArrPart(lex, i-1, i+1, tok{"KEYWORD", fmt.Sprintf("%g", MathEval(lex[i-1].value+lex[i].value+lex[i+1].value, false))})
 		}
 	}

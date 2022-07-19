@@ -56,5 +56,5 @@ func Parse(toks []tok) []coin {
 			coins = append(coins, coin{"FUNC", name, args})
 		}
 	}
-	return coins
+	return append(coins, coin{"EOF", "EOF", "EOF"})
 }
