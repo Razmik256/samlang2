@@ -24,9 +24,7 @@ func ArrEval(varval string) string {
 		parts[0] = parts[0][1 : len(parts[0])-1] // [1,2,3]< -> 1,2,3
 		parts[1] = parts2[0]                     // 1,2> -> 1,2
 		var arrvals []string
-		for _, a := range strings.Split(parts[0], ",") {
-			arrvals = append(arrvals, a)
-		}
+		arrvals = append(arrvals, strings.Split(parts[0], ",")...)
 		if strings.Contains(parts[1], ",") {
 			// when [1,2,3,4]<1,3> -> 2, 4
 			indexes := strings.Split(parts[1], ",")

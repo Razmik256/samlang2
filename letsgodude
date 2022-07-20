@@ -1,0 +1,34 @@
+# this ain't gonna work, i have to change every part of the expression, and it must be one function, so I could use it everywhere
+# i have to understand what i actually have to do
+
+x = 2;
+x = 2 + 2;
+y = x + 2;
+z = y + x/5; # all must be one function, like MathEval
+x = true & false;
+w = ~x;
+x = y < z;
+x = ~(z > y); # ComparisonEval
+arr = [1,2,3,4];
+x = arr<1>;
+x = arr<1,3> ++ arr;
+x = arr<0:2> ++ 1; # ArrEval
+# what if I want something like 
+x = ~(arr<1>/2 < y) & false;
+# so actually I need to parse this into recognizable parts, treath them by their functions and order, than set it to variable (Also I think when I done this I will make my language strict, with abbility to recognize the errors on compile time)
+x = "alo"; # StringEval
+y = x<1>; # return "l"
+# strings are arrays, they are not another type
+z = x ++ y; # strings are bassically a byte arrays, inside of "" will become an array and on print function get back to formal string
+
+if x < 10 { 
+    # the work of if statement doesn't really changes, but for more code clearness it's better to do the same work as on variable definition, recognize the type and evaluate it, if it doesnt return boolean variable throw an error;
+}
+while x < 10 {
+    # the same story with if
+}
+func alo(x,y) {
+    # the easiest way to implement functions is to interpratate them as a code part, then on "return" statement iteration break interpratation and return the variables, if the function was caused by "call" statement, it should ignore the return.
+}
+# my problem is that go is strict, maybe it's better to find a way to save data as it is in variables and not making them string, cuz it takes a lot of performance
+# the biggest part in work to make the value evaluation properly

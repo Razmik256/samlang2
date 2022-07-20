@@ -19,8 +19,8 @@ func alo(x,y) {
 ```
 - [x] numbers
 - [x] booleans
-- [ ] arrays
-- [ ] strings
+- [x] arrays
+- [x] strings
 - [x] if else
 - [x] loops
 - [ ] functions

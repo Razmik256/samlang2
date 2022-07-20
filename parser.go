@@ -54,6 +54,25 @@ func Parse(toks []tok) []coin {
 			}
 			ends = append(ends, "FUNCEND")
 			coins = append(coins, coin{"FUNC", name, args})
+		} else if toks[i].value == "return" {
+			val := ""
+			for toks[i+1].typ != "SEMICOLON" {
+				i += 1
+				val += toks[i].value
+			}
+			coins = append(coins, coin{"RETURN", val, ""})
+		} else if toks[i].value == "call" {
+			name, args := "", ""
+			for toks[i+1].typ != "LPAREN" {
+				i += 1
+				name += toks[i].value
+			}
+			i += 1
+			for toks[i+1].typ != "RPAREN" {
+				i += 1
+				args += toks[i].value
+			}
+			coins = append(coins, coin{"CALL", name, args})
 		}
 	}
 	return append(coins, coin{"EOF", "EOF", "EOF"})

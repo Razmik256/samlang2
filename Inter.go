@@ -2,74 +2,128 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 )
 
 type variable struct {
-	typ, value string
+	typ   string
+	value interface{}
+}
+type function struct {
+	args       string
+	start, end int
 }
 
-func changePart(str, change, value string) string {
-	// changes string by part
-	start := strings.Index(str, change)
-	end := start + len(change)
-	return replacePart(str, value, start, end)
+// func changePart(str, change, value string) string {
+// 	// changes string by part
+// 	start := strings.Index(str, change)
+// 	end := start + len(change)
+// 	return replacePart(str, value, start, end)
+// }
+
+// func returnTypedVariable(varval string) variable {
+// 	if strings.Contains(varval, "\"") {
+// 		return variable{"STRING", stringIntoArr(varval)}
+// 	} else if strings.Contains(varval, "[") || strings.Contains(varval, "++") {
+// 		return variable{"ARRAY", ArrEval(varval)}
+// 	} else if strings.Contains(varval, "true") || strings.Contains(varval, "false") || strings.Contains(varval, ">") || strings.Contains(varval, "<") || strings.Contains(varval, "~") || strings.Contains(varval, "=") {
+// 		return variable{"BOOL", BoolEval(varval, false)}
+// 	} else {
+// 		return variable{"NUMBER", fmt.Sprintf("%g", MathEval(varval, false))}
+// 	}
+// }
+
+// func EvalVar(varname, varval string, vars map[string]variable, funcs map[string]function) {
+// 	// evalueates any given value (numbers, booleans, strings, arrays) in string form
+// 	// aply variables into string
+// 	for n, v := range vars {
+// 		for strings.Contains(varval, n) {
+// 			varval = changePart(varval, n, v.value)
+// 		}
+// 	}
+
+// 	// contains " -> string (first, so it can't be "true" -> bool)
+// 	// contains [ -> array
+// 	// contains true/false -> bool
+// 	// else -> number
+// 	funcreg := regexp.MustCompile(`\w+\(\w+(\,\w+)*\)`)
+// 	if funcreg.MatchString(varval) {
+// 		funcCoin := Parse(Lex("func " + varval))[0]
+// 		if f, ok := funcs[funcCoin.left]; ok {
+// 			vars[varname] = funcEval(f, strings.Split(funcCoin.right, ","))
+// 		} else {
+// 			panic("no such function " + funcCoin.left)
+// 		}
+// 	} else {
+// 		vars[varname] = returnTypedVariable(varval)
+// 	}
+// }
+
+func interfaceIntoString(v variable) string {
+	switch v.typ {
+	case "number":
+		return fmt.Sprintf("%g", v.value)
+	case "bool":
+		return fmt.Sprintf("%t", v.value)
+	case "array":
+		// interface{}[1,2,3,4]
+		return "not implemented, i dunno how does it look"
+	}
+	return "error type"
 }
 
-func EvalVar(varname, varval string, vars map[string]variable) {
-	// evalueates any given value (numbers, booleans, strings, arrays) in string form
-	// aply variables into string
+func setVariables(value string, vars map[string]variable, funcs map[string]function) string {
 	for n, v := range vars {
-		for strings.Contains(varval, n) {
-			varval = changePart(varval, n, v.value)
+		if strings.Contains(value, n) {
+			strings.ReplaceAll(value, n, interfaceIntoString(v))
 		}
 	}
-
-	if strings.Contains(varval, "[") || strings.Contains(varval, "++") {
-		vars[varname] = variable{"ARRAY", ArrEval(varval)}
-	} else if strings.Contains(varval, "true") || strings.Contains(varval, "false") || strings.Contains(varval, ">") || strings.Contains(varval, "<") || strings.Contains(varval, "~") || strings.Contains(varval, "=") {
-		vars[varname] = variable{"BOOL", BoolEval(varval, false)}
-	} else {
-		vars[varname] = variable{"NUMBER", fmt.Sprintf("%g", MathEval(varval, false))}
-	}
-}
-
-func EvalComparison(str string, vars map[string]variable) bool {
-	// aply variables
-	for n, v := range vars {
-		for strings.Contains(str, n) {
-			str = changePart(str, n, v.value)
+	funcreg := regexp.MustCompile(`\w+\(\w+(\,\w+)*\)`)
+	for _, f := range funcreg.FindAllString(value, -1) {
+		name, args := MurderFunction(f)
+		if thefunc, ok := funcs[f]; ok {
+			funcreg.ReplaceAllString(value, interfaceIntoString(funcEval(thefunc, args)))
+		} else {
+			panic("no such function : " + f)
 		}
 	}
-	// make comparison
-	if BoolEval(str, false) == "true" {
-		return true
-	} else {
-		return false
-	}
+	return value
 }
+
+// func EvalComparison(str string, vars map[string]variable) bool {
+// 	// aply variables
+// 	for n, v := range vars {
+// 		for strings.Contains(str, n) {
+// 			str = changePart(str, n, v.value)
+// 		}
+// 	}
+// 	// make comparison
+// 	if BoolEval(str, false) == "true" {
+// 		return true
+// 	} else {
+// 		return false
+// 	}
+// }
 
 // merges new (local) variables with old ones
-func mergeVariables[vars map[string]variable](v1 vars, v2 vars) vars {
+func mergeVariables[vars map[string]variable](v1 vars, v2 vars) {
 	for k, v := range v2 {
 		v1[k] = v
 	}
-	return v1
 }
 
-func Interprate(cos []coin, protovars map[string]variable) map[string]variable {
+func Interprate(cos []coin, protovars map[string]variable, protofuncs map[string]function) map[string]variable {
 	fmt.Println(cos, "\n==============")
 	// time.Sleep(time.Second / 2)
 	var vars = protovars
+	var funcs = protofuncs
 
 	for i := 0; i < len(cos); i++ {
 		fmt.Println(cos[i])
-		// contains " -> string (first, so it can't be "true" -> bool)
-		// contains [ -> array
-		// contains true/false -> bool
-		// else -> number
 		if cos[i].function == "SET" {
-			EvalVar(cos[i].left, cos[i].right, vars)
+			EvalVar(cos[i].left, cos[i].right, vars, funcs)
+			vars[cos[i].left] = EvalValue(setVariables(cos[i].right, vars, funcs))
 		} else if cos[i].function == "IF" {
 			end := i
 			beforeelse := i
@@ -92,7 +146,7 @@ func Interprate(cos []coin, protovars map[string]variable) map[string]variable {
 			}
 			// if true, interprate it and go to end
 			if EvalComparison(cos[i].left, vars) {
-				vars = mergeVariables(vars, Interprate(cos[i+1:beforeelse], vars))
+				mergeVariables(vars, Interprate(cos[i+1:beforeelse], vars, funcs))
 				i = end
 			} else {
 				// if not, go to else
@@ -114,7 +168,7 @@ func Interprate(cos []coin, protovars map[string]variable) map[string]variable {
 				for {
 					// while it's true, interprate the part inside while
 					if EvalComparison(cos[i].left, vars) {
-						vars = mergeVariables(vars, Interprate(cos[i+1:j], vars))
+						mergeVariables(vars, Interprate(cos[i+1:j], vars, funcs))
 					} else {
 						break
 					}
@@ -125,8 +179,25 @@ func Interprate(cos []coin, protovars map[string]variable) map[string]variable {
 					i++
 				}
 			}
+		} else if cos[i].function == "FUNC" {
+			start := i
+			for cos[i].function != "FUNCEND" {
+				i++
+			}
+			funcs[cos[start].left] = function{cos[start].right, start, i}
+		} else if cos[i].function == "CALL" {
+			if f, ok := funcs[cos[i].left]; ok {
+				var localvars = map[string]variable{}
+				funcargs := strings.Split(f.args, ",")
+				for k, arg := range strings.Split(cos[i].right, ",") {
+					localvars[funcargs[k]] = returnTypedVariable(arg)
+				}
+				mergeVariables(localvars, vars)
+				Interprate(cos[f.start+1:f.end], localvars, funcs)
+			}
 		}
 	}
 
+	fmt.Println("funcs", funcs)
 	return vars
 }
