@@ -1,6 +1,6 @@
 # samlang2
 
-```ruby
+```julia
 x = true;
 x = 2;
 y = "alo";
@@ -18,7 +18,7 @@ func alo(x,y) {
 }
 ```
 Fibonnaci
-```ruby
+```julia
 func fib(max) {
     arr = [];
     num1 = 0;
