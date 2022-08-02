@@ -1,5 +1,30 @@
 # samlang2
 
+```
+x = [1,2,3]; #declare variable
+x = x ^ 1; #add to array
+x = x!!0; #get array index value
+x = "alo";
+x = x!!0; #strings are also arrays
+
+#comparison
+if true {
+  x = 0;
+}
+
+#while
+i = 0;
+while i < 10 {
+  i = i + 1;
+}
+
+#pure function declaration
+func alo(x,y) {
+  return x + y;
+}
+z = alo(2,3);
+```
+
 ```ruby
 x = true;
 x = 2;
