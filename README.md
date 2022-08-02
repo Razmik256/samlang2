@@ -23,6 +23,7 @@ func alo(x,y) {
 - [x] strings
 - [x] if else
 - [x] loops
-- [ ] functions
-- [ ] local variables
+- [x] functions
+- [ ] subroutines
+- [x] local variables
 - [ ] memory managment
