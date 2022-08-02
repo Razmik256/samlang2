@@ -18,7 +18,7 @@ func alo(x,y) {
 }
 ```
 Fibonnaci
-```
+```ruby
 func fib(max) {
     arr = [];
     num1 = 0;
