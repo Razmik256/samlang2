@@ -11,7 +11,8 @@ var signs = map[string]string{
 	"+":  "PLUS",
 	"-":  "MINUS",
 	"*":  "STAR",
-	"/":  "DASH",
+	"/":  "SLASH",
+	"^":  "POWER",
 	">":  "GREATER",
 	"<":  "LESS",
 	"=":  "EQUAL",
@@ -24,7 +25,17 @@ var signs = map[string]string{
 	")":  "RPAREN",
 	"[":  "LSQUARE",
 	"]":  "RSQUARE",
+	",":  "COMMA",
+	"!":  "BANG",
 	";":  "SEMICOLON",
+}
+
+func unLex(toks []tok) string {
+	str := ""
+	for _, t := range toks {
+		str += t.value
+	}
+	return str
 }
 
 func Lex(str string) []tok {
@@ -42,7 +53,18 @@ func Lex(str string) []tok {
 				tokens = append(tokens, tok{"KEYWORD", token})
 			}
 			if v != "WHITESPACE" && v != "TAB" && v != "NEWLINE" {
-				tokens = append(tokens, tok{v, s})
+				if string(str[i]) == "!" && string(str[i+1]) == "!" {
+					tokens = append(tokens, tok{"DBLBANG", "!!"})
+					i += 1
+				} else if string(str[i]) == "=" && string(str[i+1]) == "=" {
+					tokens = append(tokens, tok{"ISEQUAL", "=="})
+					i += 1
+				} else if string(str[i]) == "~" && string(str[i+1]) == "=" {
+					tokens = append(tokens, tok{"NOTEQUAL", "~="})
+					i += 1
+				} else {
+					tokens = append(tokens, tok{v, s})
+				}
 			}
 			token = ""
 		} else {

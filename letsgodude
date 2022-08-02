@@ -9,17 +9,17 @@ x = true & false;
 w = ~x;
 x = y < z;
 x = ~(z > y); # ComparisonEval
-arr = [1,2,3,4];
-x = arr<1>;
-x = arr<1,3> ++ arr;
-x = arr<0:2> ++ 1; # ArrEval
+arr = [1,2,3,4, [1,2,3]];
+x = arr!!1; # [1,2,3,4, [1,2,3]]!!1 -> 2
+x = arr!!4 ^ arr;
+x = arr!!0 ^ 1; # ArrEval
 # what if I want something like 
-x = ~(arr<1>/2 < y) & false;
+x = ~(arr!!(10/2) + 5 < y) & false;
 # so actually I need to parse this into recognizable parts, treath them by their functions and order, than set it to variable (Also I think when I done this I will make my language strict, with abbility to recognize the errors on compile time)
 x = "alo"; # StringEval
-y = x<1>; # return "l"
+y = x!!1; # return "l"
 # strings are arrays, they are not another type
-z = x ++ y; # strings are bassically a byte arrays, inside of "" will become an array and on print function get back to formal string
+z = x ^ y; # strings are bassically a byte arrays, inside of "" will become an array and on print function get back to formal string
 
 if x < 10 { 
     # the work of if statement doesn't really changes, but for more code clearness it's better to do the same work as on variable definition, recognize the type and evaluate it, if it doesnt return boolean variable throw an error;
