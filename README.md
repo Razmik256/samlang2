@@ -25,7 +25,7 @@ func alo(x,y) {
 z = alo(2,3);
 ```
 
-```ruby
+```coffeescript
 x = true;
 x = 2;
 y = "alo";
@@ -43,7 +43,7 @@ func alo(x,y) {
 }
 ```
 Fibonnaci
-```ruby
+```coffeescript
 func fib(max) {
     arr = [];
     num1 = 0;
