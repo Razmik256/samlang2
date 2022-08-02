@@ -17,6 +17,25 @@ func alo(x,y) {
   return x + y;
 }
 ```
+Fibonnaci
+```
+func fib(max) {
+    arr = [];
+    num1 = 0;
+    num2 = 1;
+    i = 0;
+    while i < max {
+        a = num2;
+        num2 = num1 + num2;
+        num1 = num2;
+        arr = arr ^ num2;
+        i = i + 1;
+    }
+    return arr;
+}
+z = fib(10);
+```
+
 - [x] numbers
 - [x] booleans
 - [x] arrays
