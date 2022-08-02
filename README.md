@@ -1,6 +1,6 @@
 # samlang2
 
-```
+```ruby
 x = [1,2,3]; #declare variable
 x = x ^ 1; #add to array
 x = x!!0; #get array index value
