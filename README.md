@@ -64,10 +64,11 @@ z = fib(10);
 - [x] numbers
 - [x] booleans
 - [x] arrays
-- [ ] strings
+- [x] strings
 - [x] if else
 - [x] loops
 - [x] functions
+- [ ] solve broken return statement
 - [ ] subroutines
 - [x] local variables
 - [ ] memory managment
