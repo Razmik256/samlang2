@@ -64,7 +64,7 @@ z = fib(10);
 - [x] numbers
 - [x] booleans
 - [x] arrays
-- [x] strings
+- [ ] strings
 - [x] if else
 - [x] loops
 - [x] functions
