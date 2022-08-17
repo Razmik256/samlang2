@@ -43,6 +43,7 @@ z = fib(10);
 ```
 
 BubbleSort
+With this numbers takes 3 seconds
 ```coffeescript
 
 func changearr(arr, arrlen, index, value) {
