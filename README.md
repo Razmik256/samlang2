@@ -42,6 +42,7 @@ func fib(max) {
 z = fib(10);
 ```
 
+BubbleSort
 ```coffeescript
 
 func changearr(arr, arrlen, index, value) {
@@ -99,7 +100,6 @@ a = bubblesort([5577006791947779410,8674665223082153551,6129484611666145821,4037
 - [x] if else
 - [x] loops
 - [x] functions
-- [ ] solve broken return statement
 - [ ] subroutines
 - [x] local variables
 - [ ] memory managment
