@@ -22,14 +22,7 @@ func alo(x,y) {
 z = alo(2,3);
 ```
 
-```coffeescript
-x = true;
-x = 2;
-y = "alo";
-@@ -42,33 +17,12 @@ func alo(x,y) {
-  return x + y;
-}
-```
+
 Fibonnaci
 ```coffeescript
 func fib(max) {
