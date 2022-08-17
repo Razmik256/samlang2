@@ -61,6 +61,9 @@ func Parse(toks []tok) []coin {
 				val += toks[i].value
 			}
 			coins = append(coins, coin{"RETURN", val, ""})
+		} else if toks[i].value == "break" {
+			val := ""
+			coins = append(coins, coin{"BREAK", val, ""})
 		} else if toks[i].value == "call" {
 			name, args := "", ""
 			for toks[i+1].typ != "LPAREN" {

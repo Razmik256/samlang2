@@ -109,6 +109,17 @@ func funcEval(f function, args []string, cos []coin, vars map[string]variable, f
 	return ret
 }
 
+func stringToArray(str string) string {
+	// "alo" -> [64,12,67]
+	var arrstr string = "["
+	for i := 1; i < len(str)-1; i++ {
+		arrstr += strconv.Itoa(int(str[i])) + ","
+	}
+	arrstr = arrstr[:len(arrstr)-1]
+	arrstr += "]"
+	return arrstr
+}
+
 func setVariablesInVal(value string, cos []coin, vars map[string]variable, funcs map[string]function) string {
 
 	// for n, v := range vars {
@@ -123,6 +134,18 @@ func setVariablesInVal(value string, cos []coin, vars map[string]variable, funcs
 	// 		value = strings.ReplaceAll(value, n, interfaceIntoString(v))
 	// 	}
 	// }
+
+	// what to do with strings?
+	// i can just make a function that interprates any value in quotes into array, then in print function rearange that
+
+	fmt.Println("value", value)
+	quoteReg := regexp.MustCompile(`\".*\"`)
+	for quoteReg.MatchString(value) {
+		value = quoteReg.ReplaceAllString(value, stringToArray(value))
+	}
+
+	// "alo" ^ "blo"
+
 	l := Lex(value)
 	for i, v := range l {
 		if val, ok := vars[v.value]; ok {
@@ -254,7 +277,7 @@ func EvalValueHelper(varval string) string {
 	// no we have to walk trought operators (math + - / *, boolean ~ & | < > ==, arrays ^ !!x)
 	// + MATH
 	// + BOOL
-	// - ARRAY
+	// + ARRAY
 	// - STRINGS
 
 	// because I do this in one single function, maybe static typing can improve performance, but fuck that I'm too lazy
@@ -430,7 +453,14 @@ func EvalValueHelper(varval string) string {
 	return newvarval
 }
 
+// -----------------------------------
+//
 // should i send the functions too?...
+// i think yea
+// -----------------------------------
+//
+//
+//
 func Interprate(cos []coin, vars map[string]variable, funcs map[string]function) map[string]variable {
 	fmt.Println(cos, "\n===================")
 	for i := 0; i < len(cos); i++ {
@@ -455,17 +485,25 @@ func Interprate(cos []coin, vars map[string]variable, funcs map[string]function)
 						i++
 					}
 				}
+
 			} else {
 				for cos[i].function != "IFEND" {
 					i++
 				}
 				j := i
-				for cos[i].function != "ELSEEND" {
-					i++
+				k := i
+				for k < len(cos) {
+					if cos[k].function == "ELSEEND" {
+						break
+					}
+					k++
 				}
-				a := Interprate(cos[j+1:i], vars, funcs)
-				if len(a) > 0 {
-					mergeVariables(vars, a)
+				if k < len(cos) {
+					i = k
+					a := Interprate(cos[j+1:i], vars, funcs)
+					if len(a) > 0 {
+						mergeVariables(vars, a)
+					}
 				}
 			}
 		} else if cos[i].function == "WHILE" {
@@ -488,7 +526,11 @@ func Interprate(cos []coin, vars map[string]variable, funcs map[string]function)
 			}
 			funcs[cos[j].left] = function{args, j + 1, i}
 		} else if cos[i].function == "RETURN" {
+			// if return is inside the "if" statement ?
 			return map[string]variable{"return": EvalValue(setVariablesInVal(cos[i].left, cos, vars, funcs))}
+		} else if cos[i].function == "BREAK" {
+			// if return is inside the "if" statement ?
+			return vars
 		}
 	}
 	// } else if cos[i].function == "IF" {

@@ -1,15 +1,13 @@
-func fibb(max) {
-    arr = [];
-    num1 = 0;
-    num2 = 1;
+func arrEq(arr1, arr2, arrlen){
+    # I got the problem of nested interpretation, I can't return the value in nested statement 
     i = 0;
-    while i < max {
-        a = num2;
-        num2 = num1 + num2;
-        num1 = num2;
-        arr = arr ^ num2;
+    while i < (arrlen-1) {
+        if arr1!!i ~= arr2!!i {
+            return false;
+        }
         i = i + 1;
     }
-    return arr;
+    return true;
 }
-z = fibb(10);
+
+x = arrEq([1,2,3], [1,2,3], 3);
